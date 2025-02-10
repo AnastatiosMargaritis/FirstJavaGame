@@ -30,7 +30,7 @@ public class Projectile extends Entity{
             }
 
             if(monsterIndex != 999){
-                gamePanel.player.damageMonster(attack, monsterIndex);
+                gamePanel.player.damageMonster(attack, monsterIndex, knockBackPower);
                 alive = false;
             }
         }

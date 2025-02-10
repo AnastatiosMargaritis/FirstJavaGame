@@ -35,14 +35,17 @@ public class Entity {
     boolean attacking = false;
     public boolean alive;
     public boolean onPath = false;
+    public boolean knockBack = false;
 
     // COUNTER
     public int spriteCounter = 0;
     public int actionLockCounter = 0;
     public int invincibleCounter = 0;
     public int shotAvailableCounter = 0;
+    public int knockBackCounter = 0;
 
     // CHARACTER STATUS
+    public int defaultSpeed;
     public int maxLife;
     public int life;
     public int speed;
@@ -68,6 +71,7 @@ public class Entity {
     public int useCost;
     public int value;
     public int price;
+    public int knockBackPower;
 
     // TYPE
     public int type;
@@ -79,6 +83,7 @@ public class Entity {
     public final int type_shield = 5;
     public final int type_consumable = 6;
     public final int type_pickupOnly = 7;
+    public final int type_obstacle = 8;
 
     public List<Entity> inventory = new ArrayList<>();
     public final int maxIntentorySize = 20;
@@ -118,19 +123,6 @@ public class Entity {
         }
     }
     public void update(){
-        setAction();
-
-       checkCollision();
-
-        // IF COLLISION IS FALSE MOVE
-        if(!collisionOn){
-            switch (direction){
-                case "up":worldY -= speed; break;
-                case "down":worldY += speed; break;
-                case "left": worldX -= speed;; break;
-                case "right":  worldX += speed;; break;
-            }
-        }
 
         spriteCounter++;
         if(spriteCounter > 12){
@@ -152,6 +144,44 @@ public class Entity {
 
         if(shotAvailableCounter < 40){
             shotAvailableCounter++;
+        }
+
+        if(knockBack){
+            checkCollision();
+
+            if(collisionOn){
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }else{
+                switch (gamePanel.player.direction){
+                    case "up":worldY -= speed; break;
+                    case "down":worldY += speed; break;
+                    case "left": worldX -= speed;; break;
+                    case "right":  worldX += speed;; break;
+                }
+            }
+
+            knockBackCounter++;
+            if(knockBackCounter == 10){
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }
+        }else{
+            setAction();
+
+            checkCollision();
+
+            // IF COLLISION IS FALSE MOVE
+            if(!collisionOn){
+                switch (direction){
+                    case "up":worldY -= speed; break;
+                    case "down":worldY += speed; break;
+                    case "left": worldX -= speed;; break;
+                    case "right":  worldX += speed;; break;
+                }
+            }
         }
     };
 
@@ -377,5 +407,64 @@ public class Entity {
 //                onPath = false;
 //            }
         }
+    }
+
+    public void interact(){
+
+    }
+
+    public int getCol(){
+        return (worldX + solidArea.x) / gamePanel.tileSize;
+    }
+
+    public int getRow(){
+        return (worldY + solidArea.y) / gamePanel.tileSize;
+    }
+
+    public int getDetected(Entity user, Entity target[][], String targetName){
+        int index = 999;
+
+        // Check surrounding object
+        int entityLeftX = worldX + solidArea.x;
+        int entityRightX = worldX + solidArea.x + solidArea.width;
+        int entityTopY = worldY + solidArea.y;
+        int entityBottomY = worldY + solidArea.y + solidArea.height;
+        int startCol = (worldX + solidArea.x) / gamePanel.tileSize;
+        int startRow = (worldY + solidArea.y) / gamePanel.tileSize;
+
+        int nextWorldX = entityLeftX;
+        int nextWorldY = entityTopY;
+
+        switch (user.direction){
+            case "up":
+                nextWorldY = entityTopY - 1;
+                break;
+
+            case "down":
+                nextWorldY = entityBottomY + 1;
+                break;
+
+            case "left":
+                nextWorldX = entityLeftX - 1;
+                break;
+            case "right":
+                nextWorldX = entityRightX + 1;
+                break;
+        }
+
+        int col = nextWorldX / gamePanel.tileSize;
+        int row = nextWorldY / gamePanel.tileSize;
+
+        for(int i = 0; i < target[1].length; i++){
+            if(target[gamePanel.currentMap][i] != null){
+                if(target[gamePanel.currentMap][i].getCol() == col && target[gamePanel.currentMap][i].getRow() == row
+                        && target[gamePanel.currentMap][i].name.equals(targetName)){
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        return index;
     }
 }

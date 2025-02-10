@@ -87,7 +87,8 @@ public class Player extends Entity{
         worldX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
         worldY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
         System.out.println(worldX + " " + worldY);
-        speed = 6;
+        defaultSpeed = 6;
+        speed = defaultSpeed;
         direction = "down";
 
         // PLAYER STATUS
@@ -280,7 +281,7 @@ public class Player extends Entity{
 
             // Check monster collision with the updated worldX, worldY and solidArea
             int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.monster);
-            damageMonster(attack, monsterIndex);
+            damageMonster(attack, monsterIndex, currentWeapon.knockBackPower);
 
             // Check interactive tile collision
             int interactiveTileIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.interactiveTile);
@@ -311,6 +312,11 @@ public class Player extends Entity{
             if(gamePanel.object[gamePanel.currentMap][index].type == type_pickupOnly){
                 gamePanel.object[gamePanel.currentMap][index].use(this);
                 gamePanel.object[gamePanel.currentMap][index] = null;
+            // OBSTACLE
+            }else if(gamePanel.object[gamePanel.currentMap][index].type == type_obstacle){
+                if(keyHandler.startDialogue){
+                    gamePanel.object[gamePanel.currentMap][index].interact();
+                }
             }else{
                 String text;
 
@@ -451,10 +457,14 @@ public class Player extends Entity{
         }
     }
 
-    public void damageMonster(int attack, int index){
+    public void damageMonster(int attack, int index, int knockBackPower){
         if(index != 999){
             if(!gamePanel.monster[gamePanel.currentMap][index].invincible){
 
+                if(knockBackPower > 0){
+                    knockBack(gamePanel.monster[gamePanel.currentMap][index], knockBackPower);
+
+                }
                 int damage = attack - gamePanel.monster[gamePanel.currentMap][index].defence;
                 if(damage < 0){
                     damage = 0;
@@ -537,5 +547,11 @@ public class Player extends Entity{
             projectile.alive = false;
             generateParticle(projectile, projectile);
         }
+    }
+
+    public void knockBack(Entity entity, int knockBackPower){
+        entity.direction = direction;
+        entity.speed += knockBackPower;
+        entity.knockBack = true;
     }
 }

@@ -16,6 +16,7 @@ public class ObjectAxe extends Entity {
 
         attackArea.width = 30;
         attackArea.height = 30;
+        knockBackPower = 10;
 
         description = "[" + name + "]\n A simple axe.";
         type = type_axe;

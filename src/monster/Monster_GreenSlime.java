@@ -18,7 +18,8 @@ public class Monster_GreenSlime extends Entity {
 
             this.gamePanel = gamePanel;
             type = type_monster;
-            speed = 1;
+            defaultSpeed = 1;
+            speed = defaultSpeed;
             maxLife = 4;
             life = maxLife;
             attack = 5;
