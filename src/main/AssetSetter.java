@@ -44,6 +44,16 @@ public class AssetSetter {
         gamePanel.object[mapNumber][i].worldY = gamePanel.tileSize * 12;
 
         i++;
+        gamePanel.object[mapNumber][i] = new ObjectPotion(gamePanel);
+        gamePanel.object[mapNumber][i].worldX = gamePanel.tileSize * 12;
+        gamePanel.object[mapNumber][i].worldY = gamePanel.tileSize * 15;
+
+        i++;
+        gamePanel.object[mapNumber][i] = new ObjectPotion(gamePanel);
+        gamePanel.object[mapNumber][i].worldX = gamePanel.tileSize * 12;
+        gamePanel.object[mapNumber][i].worldY = gamePanel.tileSize * 18;
+
+        i++;
         gamePanel.object[mapNumber][i] = new ObjectDoor(gamePanel);
         gamePanel.object[mapNumber][i].worldX = gamePanel.tileSize * 26;
         gamePanel.object[mapNumber][i].worldY = gamePanel.tileSize * 12;

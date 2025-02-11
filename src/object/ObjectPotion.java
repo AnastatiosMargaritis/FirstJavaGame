@@ -19,6 +19,7 @@ public class ObjectPotion extends Entity {
 
         description = "[" + name + "]\n Minor HP Restore";
         type = type_consumable;
+        stackable = true;
     }
 
     public void use(Entity entity){

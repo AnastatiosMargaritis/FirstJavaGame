@@ -352,6 +352,21 @@ public class UI {
             }
 
             graphics2D.drawImage(entity.down1, slotX, slotY, null);
+
+            // DISPLAY AMOUNT
+            if(entity.amount > 1){
+                graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 32F));
+                int amountX;
+                int amountY;
+
+                String s = "" + entity .amount;
+                amountX = getXForAlignToRightText(s, slotX + 44);
+                amountY = slotY + gamePanel.tileSize;
+                graphics2D.setColor(new Color(60, 60, 60));
+                graphics2D.drawString(s, amountX, amountY);
+                graphics2D.setColor(Color.WHITE);
+                graphics2D.drawString(s, amountX - 3, amountY - 3);
+            }
             slotX += slotSize;
             counter++;
 

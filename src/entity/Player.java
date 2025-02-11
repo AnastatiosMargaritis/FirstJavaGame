@@ -321,8 +321,7 @@ public class Player extends Entity{
                 String text;
 
                 // INVENTORY ITEMS
-                if(inventory.size() != maxIntentorySize){
-                    inventory.add(gamePanel.object[gamePanel.currentMap][index]);
+                if(canObtainItem(gamePanel.object[gamePanel.currentMap][index])){
                     text = " Got a " + gamePanel.object[gamePanel.currentMap][index].name + "!";
                 }else{
                     text = "You cannot carry anymore!";
@@ -553,5 +552,43 @@ public class Player extends Entity{
         entity.direction = direction;
         entity.speed += knockBackPower;
         entity.knockBack = true;
+    }
+
+    public int searchItemInInventory(String itemName){
+        int itemIndex = 999;
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i).name.equals(itemName)){
+                itemIndex = i;
+                break;
+            }
+        }
+
+        return itemIndex;
+    }
+
+    public boolean canObtainItem(Entity item){
+        boolean canObtain = false;
+
+        // CHECK IF STACKABLE
+        if(item.stackable){
+            int index = searchItemInInventory(item.name);
+
+            if(index != 999){
+                inventory.get(index).amount++;
+                canObtain = true;
+            }else{
+                if(inventory.size() < maxIntentorySize){
+                    inventory.add(item);
+                    canObtain = true;
+                }
+            }
+        }else{
+            if(inventory.size() < maxIntentorySize){
+                inventory.add(item);
+                canObtain = true;
+            }
+        }
+
+        return canObtain;
     }
 }

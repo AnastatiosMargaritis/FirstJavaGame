@@ -72,6 +72,9 @@ public class Entity {
     public int value;
     public int price;
     public int knockBackPower;
+    public boolean stackable = false;
+    public int amount = 1;
+
 
     // TYPE
     public int type;

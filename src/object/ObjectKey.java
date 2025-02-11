@@ -21,6 +21,7 @@ public class ObjectKey extends Entity {
         price = 75;
 
         type = type_consumable;
+        stackable = true;
     }
 
     public void use(Entity entity){
