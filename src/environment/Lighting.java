@@ -10,6 +10,14 @@ public class Lighting {
 
     GamePanel gamePanel;
     BufferedImage darknessFilter;
+    int dayCounter;
+    float filterAlpha = 0f;
+
+    final int day = 0;
+    final int dusk = 1;
+    final int night = 2;
+    final int dawn = 3;
+    int dayState = day;
 
     public Lighting(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -18,7 +26,9 @@ public class Lighting {
     }
 
     public void draw(Graphics2D graphics2D){
+        graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
         graphics2D.drawImage(darknessFilter, 0, 0, null);
+        graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
     public void setLightSource(){
@@ -63,6 +73,43 @@ public class Lighting {
         if(gamePanel.player.ligthUpdated){
             setLightSource();
             gamePanel.player.ligthUpdated = false;
+        }
+
+        // Check the state of the day
+        if(dayState == day){
+            dayCounter ++;
+
+            if(dayCounter > 100){
+                dayState = dusk;
+                dayCounter = 0;
+            }
+        }
+
+        if(dayState == dusk){
+            filterAlpha += 0.001f;
+
+            if(filterAlpha > 1f){
+                filterAlpha = 1f;
+                dayState = night;
+            }
+        }
+
+        if(dayState == night){
+            dayCounter ++;
+
+            if(dayCounter > 100){
+                dayState = dawn;
+                dayCounter = 0;
+            }
+        }
+
+        if(dayState == dawn){
+            filterAlpha -= 0.001f;
+
+            if(filterAlpha < 0f){
+                filterAlpha = 0f;
+                dayState = day;
+            }
         }
     }
 }
