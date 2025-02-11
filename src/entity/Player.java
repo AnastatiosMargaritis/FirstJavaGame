@@ -18,6 +18,7 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
+    public boolean ligthUpdated = false;
 
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler){
@@ -536,6 +537,15 @@ public class Player extends Entity{
                 // LATER
                 selectedItem.use(this);
                 inventory.remove(itemIndex);
+            }
+
+            if(selectedItem.type == type_light){
+                if(currentLight == selectedItem){
+                    currentLight = null;
+                }else{
+                    currentLight = selectedItem;
+                }
+                ligthUpdated = true;
             }
         }
     }

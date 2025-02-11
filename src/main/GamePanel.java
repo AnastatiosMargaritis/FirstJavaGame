@@ -3,6 +3,7 @@ package main;
 import AI.PathFinder;
 import entity.Entity;
 import entity.Player;
+import environment.EnvironmentManager;
 import main.tile.TileManager;
 import main.tile_interactive.InteractiveTile;
 
@@ -35,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     int fullScreenHeight = screenHeight;
     BufferedImage tempScreen;
     Graphics2D graphics2D;
+    EnvironmentManager environmentManager = new EnvironmentManager(this);
 
 
     //FPS
@@ -85,6 +87,8 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setMonster();
         assetSetter.setInteractiveTile();
         gameState = playState;
+
+        environmentManager.setup();
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D) tempScreen.getGraphics();
@@ -179,8 +183,9 @@ public class GamePanel extends JPanel implements Runnable {
                     interactiveTile1.update();
                 }
             }
-        }
 
+            environmentManager.update();
+        }
 
 
         if(gameState == pauseState){
@@ -235,6 +240,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         player.draw(graphics2D);
+        environmentManager.draw(graphics2D);
 
         // UI
         ui.draw(graphics2D);

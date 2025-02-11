@@ -60,6 +60,7 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Entity currentLight;
     public int maxMana;
     public int mana;
     public Projectile projectile;
@@ -74,7 +75,7 @@ public class Entity {
     public int knockBackPower;
     public boolean stackable = false;
     public int amount = 1;
-
+    public int lightRadius;
 
     // TYPE
     public int type;
@@ -87,6 +88,7 @@ public class Entity {
     public final int type_consumable = 6;
     public final int type_pickupOnly = 7;
     public final int type_obstacle = 8;
+    public final int type_light = 9;
 
     public List<Entity> inventory = new ArrayList<>();
     public final int maxIntentorySize = 20;

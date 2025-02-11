@@ -346,7 +346,8 @@ public class UI {
 
             // EQUIP CURSOR
             if(entity == gamePanel.player.currentWeapon ||
-                entity == gamePanel.player.currentShield){
+                entity == gamePanel.player.currentShield ||
+                entity == gamePanel.player.currentLight){
                 graphics2D.setColor(new Color(240, 190, 90));
                 graphics2D.fillRoundRect(slotX, slotY, gamePanel.tileSize, gamePanel.tileSize, 10, 10);
             }
