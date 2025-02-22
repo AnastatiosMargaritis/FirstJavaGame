@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean moveUp, moveDown, moveLeft, moveRight, startDialogue, projectileShoot;
+    public boolean moveUp, moveDown, moveLeft, moveRight, startDialogue, projectileShoot, spacePressed;
     public boolean enterPressed = false;
     GamePanel gamePanel;
 
@@ -86,6 +86,10 @@ public class KeyHandler implements KeyListener {
 
         if(code == KeyEvent.VK_F){
             projectileShoot = true;
+        }
+
+        if(code == KeyEvent.VK_G){
+            spacePressed = true;
         }
 
     }
@@ -246,6 +250,9 @@ public class KeyHandler implements KeyListener {
 
         if(code == KeyEvent.VK_F){
             projectileShoot = false;
+        }
+        if(code == KeyEvent.VK_G){
+            spacePressed = false;
         }
     }
 }

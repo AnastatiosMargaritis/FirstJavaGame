@@ -36,6 +36,7 @@ public class Player extends Entity{
         setDefaultValues();
         getPlayerImage();
         getPlayerAttackImage();
+        getPlayerGuardImage();
         setItems();
     }
 
@@ -83,7 +84,14 @@ public class Player extends Entity{
         }
 
     }
-    
+
+    public void getPlayerGuardImage(){
+        guardUp = setup("/resources/player/guard_up", gamePanel.tileSize, gamePanel.tileSize);
+        guardDown = setup("/resources/player/guard_down", gamePanel.tileSize, gamePanel.tileSize);
+        guardLeft = setup("/resources/player/guard_left", gamePanel.tileSize, gamePanel.tileSize);
+        guardRight = setup("/resources/player/guard_right", gamePanel.tileSize, gamePanel.tileSize);
+    }
+
     public void setDefaultValues(){
         worldX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
         worldY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
@@ -134,8 +142,11 @@ public class Player extends Entity{
     }
     public void update(){
 
-        if(attacking){
+        if(attacking) {
             handleAttack();
+        }else if(keyHandler.spacePressed){
+            guarding = true;
+            guardCounter++;
         }else if(keyHandler.moveUp || keyHandler.moveDown ||
                 keyHandler.moveLeft || keyHandler.moveRight || keyHandler.startDialogue){
             if(keyHandler.moveUp){
@@ -188,6 +199,8 @@ public class Player extends Entity{
             }
 
             gamePanel.keyHandler.startDialogue = false;
+            guarding = false;
+            guardCounter = 0;
 
             spriteCounter++;
             if(spriteCounter > 12){
@@ -231,6 +244,14 @@ public class Player extends Entity{
 
         if(shotAvailableCounter < 40){
             shotAvailableCounter++;
+        }
+
+        if(offBalance){
+            offBalanceCounter++;
+            if(offBalanceCounter > 60){
+                offBalance = false;
+                offBalanceCounter = 0;
+            }
         }
 
         if(life > maxLife){
@@ -296,7 +317,9 @@ public class Player extends Entity{
 
         switch (direction){
             case "up":
-                if(!attacking){
+                if(guarding){
+                    image = guardUp;
+                }else if(!attacking){
                     if(spriteNum == 1){
                         image = up1;
                     }
@@ -317,7 +340,9 @@ public class Player extends Entity{
 
                 break;
             case "down":
-                if(!attacking){
+                if(guarding){
+                    image = guardDown;
+                } else if(!attacking){
                     if(spriteNum == 1){
                         image = down1;
                     }
@@ -336,7 +361,9 @@ public class Player extends Entity{
                 }
                 break;
             case "left":
-                if(!attacking){
+                if(guarding){
+                    image = guardLeft;
+                }else if(!attacking){
                     if(spriteNum == 1){
                         image = left1;
                     }
@@ -357,7 +384,9 @@ public class Player extends Entity{
 
                 break;
             case "right":
-                if(!attacking){
+                if(guarding){
+                    image = guardRight;
+                }else if(!attacking){
                     if(spriteNum == 1){
                         image = right1;
                     }

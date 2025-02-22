@@ -76,13 +76,13 @@ public class AssetSetter {
 
     public void setMonster(){
         int mapNumber = 0;
-//        gamePanel.monster[mapNumber][0] = new Monster_GreenSlime(gamePanel);
-//        gamePanel.monster[mapNumber][0].worldX = gamePanel.tileSize * 18;
-//        gamePanel.monster[mapNumber][0].worldY = gamePanel.tileSize * 18;
-
-        gamePanel.monster[mapNumber][0] = new AttackingMonster(gamePanel);
+        gamePanel.monster[mapNumber][0] = new Monster_GreenSlime(gamePanel);
         gamePanel.monster[mapNumber][0].worldX = gamePanel.tileSize * 18;
         gamePanel.monster[mapNumber][0].worldY = gamePanel.tileSize * 18;
+
+        gamePanel.monster[mapNumber][0] = new AttackingMonster(gamePanel);
+        gamePanel.monster[mapNumber][0].worldX = gamePanel.tileSize * 14;
+        gamePanel.monster[mapNumber][0].worldY = gamePanel.tileSize * 13;
     }
 
     public void setInteractiveTile(){

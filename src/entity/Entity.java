@@ -15,7 +15,8 @@ public class Entity {
     GamePanel gamePanel;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2,
+    guardUp, guardDown, guardLeft, guardRight;
     public String direction;
 
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
@@ -36,6 +37,8 @@ public class Entity {
     public boolean alive;
     public boolean onPath = false;
     public boolean knockBack = false;
+    public boolean guarding = false;
+    public boolean offBalance = false;
 
     // COUNTER
     public int spriteCounter = 0;
@@ -43,6 +46,8 @@ public class Entity {
     public int invincibleCounter = 0;
     public int shotAvailableCounter = 0;
     public int knockBackCounter = 0;
+    public int guardCounter = 0;
+    int offBalanceCounter = 0;
 
     // CHARACTER STATUS
     public int defaultSpeed;
@@ -348,6 +353,23 @@ public class Entity {
     public void damagePlayer(int attack){
         if(!gamePanel.player.invincible){
             int damage = attack - gamePanel.player.defence;
+
+            String guardDirection = getOppositeDirection(direction);
+
+            if(gamePanel.player.guarding && gamePanel.player.direction.equals(guardDirection)){
+
+                //PARRY
+                if(gamePanel.player.guardCounter < 10){
+                    damage = 0;
+                    offBalance = true;
+                    spriteCounter =- 60;
+                }else{
+                    damage /= 3;
+                }
+
+
+            }
+
             if(damage < 0){
                 damage = 0;
             }
@@ -622,5 +644,16 @@ public class Entity {
             spriteCounter = 0;
             attacking = false;
         }
+    }
+
+    public String getOppositeDirection(String direction){
+
+        return switch (direction) {
+            case "up" -> "down";
+            case "down" -> "up";
+            case "left" -> "right";
+            case "right" -> "left";
+            default -> "";
+        };
     }
 }
