@@ -246,65 +246,6 @@ public class Player extends Entity{
         }
     }
 
-    public void handleAttack(){
-        spriteCounter++;
-        if(spriteCounter <= 5){
-            spriteNum = 1;
-        }
-
-        if(spriteCounter > 5 &&spriteCounter <= 25){
-            spriteNum = 2;
-
-            int currentWorldX = worldX;
-            int currentWorldY = worldY;
-            int solidAreaWidth = solidArea.width;
-            int solidAreaHeight = solidArea.height;
-
-            // Adjust player's worldX/worldY for the attackArea
-            switch (direction){
-                case "up":
-                    worldY -= attackArea.height;
-                    break;
-                case "down":
-                    worldY += attackArea.height;
-                    break;
-                case "left":
-                    worldX -= attackArea.width;
-                    break;
-                case "right":
-                    worldX += attackArea.width;
-                    break;
-            }
-
-            // attackArea becomes solidArea
-            solidArea.width = attackArea.width;
-            solidArea.height = attackArea.height;
-
-            // Check monster collision with the updated worldX, worldY and solidArea
-            int monsterIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.monster);
-            damageMonster(attack, monsterIndex, currentWeapon.knockBackPower);
-
-            // Check interactive tile collision
-            int interactiveTileIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.interactiveTile);
-            damageInteractiveTile(interactiveTileIndex);
-
-            // Check projectile collision
-            int projectileIndex = gamePanel.collisionChecker.checkEntity(this, gamePanel.projectileList);
-            damageProjectile(projectileIndex);
-
-            // After checking collision, restore the originalData
-            worldX = currentWorldX;
-            worldY = currentWorldY;
-            solidArea.width = solidAreaWidth;
-            solidArea.height = solidAreaHeight;
-        }
-
-        if(spriteCounter > 25){
-            spriteNum = 1;
-            spriteCounter = 0;
-            attacking = false;
-        }
-    }
 
     public void pickUpObject(int index){
         if(index != 999){
@@ -556,12 +497,6 @@ public class Player extends Entity{
             projectile.alive = false;
             generateParticle(projectile, projectile);
         }
-    }
-
-    public void knockBack(Entity entity, int knockBackPower){
-        entity.direction = direction;
-        entity.speed += knockBackPower;
-        entity.knockBack = true;
     }
 
     public int searchItemInInventory(String itemName){

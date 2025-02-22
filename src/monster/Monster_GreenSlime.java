@@ -48,10 +48,7 @@ public class Monster_GreenSlime extends Entity {
 
         public void setAction(){
             if(onPath){
-                int goalCol = (gamePanel.player.worldX + gamePanel.player.solidArea.x) / gamePanel.tileSize;
-                int goalRow = (gamePanel.player.worldY + gamePanel.player.solidArea.y) / gamePanel.tileSize;
-
-                searchPath(goalCol, goalRow);
+                searchPath(getGoalCol(gamePanel.player), getGoalCol(gamePanel.player));
 
                 int i = new Random().nextInt(200) + 1;
                 if(i > 197 && !projectile.alive && shotAvailableCounter == 40){
